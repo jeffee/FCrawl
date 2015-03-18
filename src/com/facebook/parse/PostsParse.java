@@ -15,39 +15,61 @@ import com.restfb.json.JsonObject;
 
 public class PostsParse {
 	
-	public void commentParse(String objID, JsonObject commObj){
-		JsonArray arrays = commObj.getJsonArray("data");
-		
-		String next = commObj.getJsonObject("paging").getString("next");
-		System.out.println(next);
-		String fDir = "E://FB//蔡英文//feeds//"+objID+"//";
-		Crawl.crawlPages(commObj, fDir, 1);
-	}
-	
-	public void likeParse(JsonObject likeObj){
+	/***抓取评论信息***/
+	public void commentParse(String objID, JsonObject commObj){		
+		String fDir = "E://FB//蔡英文//feeds//"+objID+"//comments//";
+		File dir = new File(fDir);
+		if(!dir.exists())
+			Crawl.crawlPages(commObj, fDir, 1);
+		else
+			System.out.println("The item has been processed before!");
 		
 	}
 	
-	/***
-	 * @todo: 未考虑没有comments和likes的时候
-	 * ***/
+	/***抓取点赞的用户**/
+	public void likeParse(String objID, JsonObject likeObj){
+		String fDir = "E://FB//蔡英文//feeds//"+objID+"//likes//";
+		File dir = new File(fDir);
+		if(!dir.exists())
+			Crawl.crawlPages(likeObj, fDir, 1);
+		else
+			System.out.println("The item has been processed before!");
+	}
+	
+	
 	public void parse(JsonObject oriObj){
 		JsonArray arrays = oriObj.getJsonArray("data");
 		for(int i=0;i<arrays.length();i++){
 			JsonObject jObj = (JsonObject) arrays.get(i);
-			String objID = jObj.getString("object_id");
-			//String content = jObj.getString("message");		//有可能没有内容（纯照片或链接），此时会报错		
+			String objID;
+			try {
+				objID = jObj.getString("object_id");
+			} catch (Exception e) {
+				objID = jObj.getString("id"); //分享别人的内容时， 没有“object_id”,用id代替。此时"status_type": "shared_story",
+			}				
 		
-			commentParse(objID, jObj.getJsonObject("comments"));
-			likeParse(jObj.getJsonObject("likes"));
+			try {
+				commentParse(objID, jObj.getJsonObject("comments"));
+				//likeParse(objID, jObj.getJsonObject("likes"));
+			} catch (Exception e) {
+				// 出现异常时表示没有评论或赞
+				System.err.println("Comments/Likes not found!");
+			}
 		}
 	}
 	
 	
 	public static void main(String[] args) {
-		String str = FileProcess.readLine(new File("E://FB//1426574112.fb"));
-		PostsParse parse = new PostsParse();
-		parse.parse(new JsonObject(str));
+		File dir = new File("E://FB//蔡英文//posts");
+		File[] files = dir.listFiles();
+		for(File file : files){
+			String str = FileProcess.readLine(file);
+			PostsParse parse = new PostsParse();
+			parse.parse(new JsonObject(str));
+			System.out.println("File "+file+" has been processed sucessfully!");
+			System.out.println("********************************************");
+		}
+		
 	}
 
 }

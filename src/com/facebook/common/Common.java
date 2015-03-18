@@ -5,25 +5,41 @@
 package com.facebook.common;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Common {
 
 	public final static SimpleDateFormat timeFormat = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 
-	public static String MY_ACCESS_TOKEN = "CAACEdEose0cBAAA7DsFPqB4T91QwUkz181OT1qEKAkcDDTQJxssvpAA91fRPE1nSDajAmsM2CZCAQZAxC8s5ALLNgEATgq6H1nM7ZCoXJXgsaIvvvAo2JLJ1McQ2EYpehsR4daINNrnjGISscf3JWVWe1dSlC5TT420mglI1yGsmrmY8VOuYEDWNxzQN8DkEryrw3gctiPn3O6HrTnx";
+	public static String MY_ACCESS_TOKEN = "CAACEdEose0cBABsTOdoPWQ6ZCHWJy6KCfBSY3X86w6zeaJZBvjeNThrWYuQ8XwXGK4pXCfQAPA2t5VcEZBrajCckfLgfjAD1NADrCqR1JoAfMKD9zadqgrq1G35vI8zE0bl8KjQ04Ws6HdBPZAtBd6Wfjbc7f0YZAh8a4LKDmqDkencmahU82g6ZAPopSZA4Oleg0utyKSzZCLEIVaNZCouOM";
 
 	
 	public static String genFileName(String dir, int i){
 		return (dir+((dir.endsWith("//"))?"":"//") + i + ".fb");
 	}
 	
+	/***用新的token替换掉原来url中的旧token
+	 * 数据采集如果不是在一个token的有效期内完成，到下一个token生效时原有url会无效，需要更新
+	 * ***/
+	public static String updateAccessToken(String url){
+		String newUrl = "";
+		Pattern pattern = Pattern.compile("access_token=(.*?)&");
+		Matcher matcher = pattern.matcher(url+"&");
+		if(matcher.find()){
+			StringBuffer sb = new StringBuffer();
+			matcher.appendReplacement(sb, "access_token="+Common.MY_ACCESS_TOKEN+"&");
+			matcher.appendTail(sb);
+			newUrl = sb.toString();
+			//System.out.println(newUrl);
+		}
+		return newUrl;
+	}
+	
 	public static void main(String[] args) {
-		String fDir = "D://ekjk//";
-		System.out.println(fDir);
-		fDir = fDir+((fDir.endsWith("//"))?"":"//");
-		System.out.println(fDir);
+		String str = "46251501064_10152572626026065/comments?access_token=CAACEdEose0cBAPZBE8ZBZBYDJRyOlglzjlZBNNqI0ZASzKsBNLIYoXGfRZAZBxzE9lUmR8OzQjZAU6WMWwFv9nwAZA9H7kf1JOLAX2B1xtyZAOggOJ55N2xP4KxMZA276FuZC6ZCCrT2ZBQLCuRpWpZBzVr6q1KSwygOUr2eaDWi5erp7ssASjhsOkUs2JR8jyDXw9k5kQGOS9oAh7me6aBRBo5U4ci&limit=25&after=MzQ%3D";
+		Common.updateAccessToken(str);
 	}
 
 }
