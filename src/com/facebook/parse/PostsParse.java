@@ -10,6 +10,7 @@ import java.io.File;
 import com.facebook.crawl.Crawl;
 import com.facebook.crawl.FileProcess;
 import com.restfb.json.JsonArray;
+import com.restfb.json.JsonException;
 import com.restfb.json.JsonObject;
 
 
@@ -19,7 +20,7 @@ public class PostsParse {
 	public void commentParse(String objID, JsonObject commObj){		
 		String fDir = "E://FB//蔡英文//feeds//"+objID+"//comments//";
 		File dir = new File(fDir);
-		if(!dir.exists())
+		if(!dir.exists()||dir.listFiles().length<=1)
 			Crawl.crawlPages(commObj, fDir, 1);
 		else
 			System.out.println("The item has been processed before!");
@@ -44,14 +45,14 @@ public class PostsParse {
 			String objID;
 			try {
 				objID = jObj.getString("object_id");
-			} catch (Exception e) {
+			} catch (JsonException e) {
 				objID = jObj.getString("id"); //分享别人的内容时， 没有“object_id”,用id代替。此时"status_type": "shared_story",
 			}				
 		
 			try {
 				commentParse(objID, jObj.getJsonObject("comments"));
 				//likeParse(objID, jObj.getJsonObject("likes"));
-			} catch (Exception e) {
+			} catch (JsonException e) {
 				// 出现异常时表示没有评论或赞
 				System.err.println("Comments/Likes not found!");
 			}

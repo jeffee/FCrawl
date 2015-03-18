@@ -13,7 +13,7 @@ public class Common {
 	public final static SimpleDateFormat timeFormat = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 
-	public static String MY_ACCESS_TOKEN = "CAACEdEose0cBABsTOdoPWQ6ZCHWJy6KCfBSY3X86w6zeaJZBvjeNThrWYuQ8XwXGK4pXCfQAPA2t5VcEZBrajCckfLgfjAD1NADrCqR1JoAfMKD9zadqgrq1G35vI8zE0bl8KjQ04Ws6HdBPZAtBd6Wfjbc7f0YZAh8a4LKDmqDkencmahU82g6ZAPopSZA4Oleg0utyKSzZCLEIVaNZCouOM";
+	public static String MY_ACCESS_TOKEN = "CAACEdEose0cBAM0pcCgFuLGzeyPSFDwLYFPqjKOHwGnv4drOGDWiEjZBhXhE8OxZBWhbvIgvaVFZByxZB4GUwR5VFM5ZAuiNHdm0ECT5IXSHkItTdDbLxpvWDXEuwZAJ2rsVVvj0rZCkZCWUHdBxLvnR6PHiZC3B0sZCkMGabFZAd6ZAs5fTKhrVZAbi3U3WfXlt53AarKi9rZC7cbpqb1A3aNHmQm";
 
 	
 	public static String genFileName(String dir, int i){

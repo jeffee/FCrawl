@@ -2,16 +2,17 @@ package com.facebook.common;
 
 import java.io.File;
 
+import com.facebook.crawl.FileProcess;
+import com.restfb.json.JsonObject;
+
 
 public class Demo {
 	
 	public static void main(String[] args) {
 		String fDir = "E://FB//蔡英文//feeds//10152544606906065//comments//";
-		File dir = new File(fDir);
-		if(!dir.exists())
-			System.out.println("not exist");
-		else
-			System.out.println("exist");
+		String str = FileProcess.readLine(new File("E://FB//1426574112.fb"));
+		JsonObject obj = new JsonObject(str);
+		obj.getJsonObject("df");
 	}
 
 }
